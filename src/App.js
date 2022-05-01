@@ -9,10 +9,13 @@ import {
   Card,
   CardContent,
 } from "@material-ui/core";
+import InfoBox from "./InfoBox";
+import numeral from "numeral";
 function App() {
   const [country, setInputCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
   const [countries, setCountries] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
 
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
@@ -70,7 +73,31 @@ function App() {
             </Select>
           </FormControl>
         </div>
-        <div className="app__stats"></div>
+        <div className="app__stats">
+        <InfoBox
+            onClick={(e) => setCasesType("cases")}
+            title="Coronavirus Cases"
+            isRed
+            active={casesType === "cases"}
+            cases={countryInfo.todayCases}
+            total={numeral(countryInfo.cases).format("0.0a")}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("recovered")}
+            title="Recovered"
+            active={casesType === "recovered"}
+            cases={countryInfo.todayRecovered}
+            total={numeral(countryInfo.recovered).format("0.0a")}
+          />
+          <InfoBox
+            onClick={(e) => setCasesType("deaths")}
+            title="Deaths"
+            isRed
+            active={casesType === "deaths"}
+            cases={countryInfo.todayDeaths}
+            total={numeral(countryInfo.deaths).format("0.0a")}
+          />
+        </div>
       </div>
       <Card className="app__right"></Card>
     </div>
